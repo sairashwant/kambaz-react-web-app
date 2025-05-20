@@ -1,7 +1,10 @@
 import { MdDoNotDisturbAlt } from "react-icons/md";
-import { FaCheckCircle } from "react-icons/fa";
+import { FaCheckCircle, FaHome } from "react-icons/fa";
 import { BiImport } from "react-icons/bi";
 import { LiaFileImportSolid } from "react-icons/lia";
+import { VscGraph } from "react-icons/vsc";
+import { AiOutlineNotification } from "react-icons/ai";
+import { IoIosNotifications } from "react-icons/io";
 
 export default function CourseStatus() {
     return (
@@ -22,15 +25,15 @@ export default function CourseStatus() {
       <button className="btn btn-lg btn-secondary w-100 mt-1 text-start">
         <LiaFileImportSolid className="me-2 fs-5" /> Import from Commons </button>
         <button className="btn btn-lg btn-secondary w-100 mt-1 text-start">
-        <BiImport className="me-2 fs-5" /> Choose from Home Page </button>
+        <FaHome className="me-2 fs-5" /> Choose from Home Page </button>
         <button className="btn btn-lg btn-secondary w-100 mt-1 text-start">
-        <BiImport className="me-2 fs-5" /> View Course Screen </button>
+        <VscGraph className="me-2 fs-5" /> View Course Screen </button>
         <button className="btn btn-lg btn-secondary w-100 mt-1 text-start">
-        <BiImport className="me-2 fs-5" /> New Announcement </button>
+        <AiOutlineNotification className="me-2 fs-5" /> New Announcement </button>
         <button className="btn btn-lg btn-secondary w-100 mt-1 text-start">
-        <BiImport className="me-2 fs-5" /> New Analytics </button>
+        <VscGraph className="me-2 fs-5" /> New Analytics </button>
         <button className="btn btn-lg btn-secondary w-100 mt-1 text-start">
-        <BiImport className="me-2 fs-5" /> View Course  </button>
+        <IoIosNotifications  className="me-2 fs-5" /> View Course  </button>
       </div>
     );
   }
