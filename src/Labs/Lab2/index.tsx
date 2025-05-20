@@ -15,7 +15,7 @@ import ReactIconsSampler from "./ReactIcons";
 import Zindex from "./Zindex";
 import BootstrapGrids from "./BootstrapGrids";
 import ScreenSizeLabel from "./ScreenSizeLabel";
-import BootstrapTabels from "./BootStrapTabels";
+import BootstrapTabels from "./BootstrapTabels";
 import BootStrapLists from "./BootStrapLists";
 import BootstrapForms from "./BootstrapForms";
 import BootstrapNavigation from "./BootstrapNavigation";
