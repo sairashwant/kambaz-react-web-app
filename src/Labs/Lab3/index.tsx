@@ -31,9 +31,11 @@ import VariablesAndConstants from './VariablesAndConstants';
 import VariableTypes from './VariableTypes';
 import Highlight from "./Highlight";
 import PathParameters from './PathParameters';
+import { Container } from 'react-bootstrap';
 export default function Lab3() {
   console.log('Hello World!');
   return(
+    <Container>
     <div id="wd-lab3">
       <h3>Lab 3</h3>
       <VariablesAndConstants/>
@@ -73,7 +75,10 @@ export default function Lab3() {
         vel nihil repellat nemo explicabo excepturi consectetur. Modi omnis minus sequi maiores, provident voluptates.
      </Highlight>
      <PathParameters />
+     
       <hr />
     </div>
+    </Container>
+    
   );
 }
