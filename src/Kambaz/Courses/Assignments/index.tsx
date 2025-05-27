@@ -6,7 +6,7 @@ import AssignmentControlButtons from "./AssignmentControlButtons";
 import { BsGripVertical } from "react-icons/bs";
 import { MdAssignment } from "react-icons/md";
 import * as db from "../../Database";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 export default function Assignments() {
   const {cid} = useParams()
