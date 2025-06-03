@@ -13,6 +13,9 @@ export default function Assignments() {
   const { cid } = useParams();
   const dispatch = useDispatch();
   const { assignments } = useSelector((state: any) => state.assignmentReducer);
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const isFaculty = currentUser?.role === "FACULTY";
+
   const courseAssignments = assignments.filter((a: any) => a.course === cid);
 
   const handleDelete = (id: string) => {
@@ -23,7 +26,7 @@ export default function Assignments() {
 
   return (
     <div id="wd-assignments">
-      <AssignmentControl />
+      {isFaculty && <AssignmentControl />}
       <br />
 
       <ListGroup.Item className="wd-module p-0 mb-5 fs-5 border-gray">
@@ -35,8 +38,12 @@ export default function Assignments() {
           </span>
           <div className="d-flex align-items-center gap-2">
             <span className="fs-6 border border-light px-2 py-1 rounded">40% of total</span>
-            <FaPlus className="fs-5" />
-            <IoEllipsisVertical className="fs-4" />
+            {isFaculty && (
+              <>
+                <FaPlus className="fs-5" />
+                <IoEllipsisVertical className="fs-4" />
+              </>
+            )}
           </div>
         </div>
 
@@ -62,14 +69,16 @@ export default function Assignments() {
                     Due {a.dueDate} at 11:59 pm | {a.points} pts
                   </small>
                 </div>
-                <div className="d-flex flex-column align-items-end gap-2">
-                  <AssignmentControlButtons />
-                  <FaTrash
-                    className="text-danger cursor-pointer"
-                    onClick={() => handleDelete(a._id)}
-                    style={{ cursor: "pointer" }}
-                  />
-                </div>
+                {isFaculty && (
+                  <div className="d-flex flex-column align-items-end gap-2">
+                    <AssignmentControlButtons />
+                    <FaTrash
+                      className="text-danger cursor-pointer"
+                      onClick={() => handleDelete(a._id)}
+                      style={{ cursor: "pointer" }}
+                    />
+                  </div>
+                )}
               </div>
             </ListGroup.Item>
           ))}

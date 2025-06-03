@@ -27,11 +27,11 @@ const coursesSlice = createSlice({
   reducers: {
     addCourse: (
       state,
-      { payload: course }: { payload: Omit<Course, "_id"> }
+      { payload: course }: { payload: Course }
     ) => {
       const newCourse: Course = {
         ...course,
-        _id: uuidv4(),
+        _id: course._id ? course._id : uuidv4(),
       };
       state.courses.push(newCourse);
     },
