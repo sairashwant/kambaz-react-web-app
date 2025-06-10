@@ -25,3 +25,7 @@ export const createModuleForCourse = async (courseId: string, module: any) => {
   );
   return response.data;
 };
+export const fetchEnrolledCoursesForUser = async (userId: string) => {
+  const { data } = await axios.get(`${REMOTE_SERVER}/api/users/${userId}/courses`);
+  return data;
+};

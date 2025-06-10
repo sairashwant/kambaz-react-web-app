@@ -35,13 +35,11 @@ export default function Dashboard({
         <Col>
           <h5 className="mb-0">New Course</h5>
         </Col>
-        {!isFaculty && (
-          <Col className="text-end">
-            <Button variant="primary" onClick={() => setEnrolling(!enrolling)}>
-              {enrolling ? "My Courses" : "All Courses"}
-            </Button>
-          </Col>
-        )}
+        <Col className="text-end">
+          <Button variant="primary" onClick={() => setEnrolling(!enrolling)}>
+            {enrolling ? "My Courses" : "All Courses"}
+          </Button>
+        </Col>
       </Row>
 
       {isFaculty && !enrolling && (

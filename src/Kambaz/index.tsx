@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import * as courseClient from "./Courses/client";
 import * as userClient from "./Account/client";
+import * as enrollmentClient from "./Courses/Enrollments/client"; 
 
 export default function Kambaz() {
   const [courses, setCourses] = useState<any[]>([]);
@@ -50,11 +51,17 @@ export default function Kambaz() {
   };
 
   const updateEnrollment = async (courseId: string, enrolled: boolean) => {
-    setCourses(
-      courses.map((course) =>
-        course._id === courseId ? { ...course, enrolled } : course
-      )
-    );
+    try {
+      if (!currentUser) return;
+      if (enrolled) {
+        await enrollmentClient.enrollUser(currentUser._id, courseId);
+      } else {
+        await enrollmentClient.unenrollUser(currentUser._id, courseId);
+      }
+      await fetchCourses(); // Refresh the updated course list
+    } catch (error) {
+      console.error("Enrollment update failed:", error);
+    }
   };
 
   const addCourse = async () => {
