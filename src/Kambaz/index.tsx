@@ -5,9 +5,11 @@ import KambazNavigation from "./Navigation";
 import Courses from "./Courses";
 import "./styles.css";
 import ProtectedRoute from "./Account/ProtectedRoute";
-
+import Session from "./Account/Session";
 export default function Kambaz() {
+  
   return (
+    <Session>
     <div id="wd-kambaz">
       <KambazNavigation />
       <div className="wd-main-content-offset p-3">
@@ -35,5 +37,6 @@ export default function Kambaz() {
         </Routes>
       </div>
     </div>
+    </Session>
   );
 }
