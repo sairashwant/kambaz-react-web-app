@@ -23,5 +23,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src", "kambaz-node-server-app/Lab5/PathParameters.js"]
+  "include": ["src", "kambaz-node-server-app/Lab5/PathParameters.js", "kambaz-node-server-app/Database/index.js"]
 }
