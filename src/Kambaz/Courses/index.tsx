@@ -8,18 +8,14 @@ import { FaAlignJustify } from "react-icons/fa";
 import PeopleTable from "./People/Table";
 import { useSelector } from "react-redux";
 
-export default function Courses() {
+export default function Courses({ courses }: { courses: any[] }) {
   const { cid } = useParams();
-  const courses = useSelector((state: any) => state.courseReducer.courses);
-  const enrollments = useSelector((state: any) => state.enrollmentsReducer.enrollments || []);
-  const { currentUser } = useSelector((state: any) => state.accountReducer);
-  const course = courses.find((course: any) => course._id === cid);
   const { pathname } = useLocation();
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
 
-  const isEnrolled = enrollments.some(
-    (enrollment: any) =>
-      enrollment.user === currentUser?._id && enrollment.course === cid
-  );
+  const course = courses.find((c) => c._id === cid);
+  const isFaculty = currentUser?.role === "FACULTY";
+  const isEnrolled = isFaculty || course?.enrolled;
 
   if (!isEnrolled) {
     return <Navigate to="/Kambaz/Dashboard" replace />;
@@ -29,7 +25,7 @@ export default function Courses() {
     <div id="wd-courses">
       <h2 className="text-danger">
         <FaAlignJustify className="me-4 fs-4 mb-1" />
-        {course && course.name} {'>'} {pathname.split("/")[4]}
+        {course?.name} {'>'} {pathname.split("/")[4]}
       </h2>
       <div className="d-flex">
         <div className="d-none d-md-block">

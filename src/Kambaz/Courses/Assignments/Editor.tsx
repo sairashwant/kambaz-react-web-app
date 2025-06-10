@@ -1,47 +1,44 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Col, Form, Row, Button } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { addAssignment, updateAssignment } from "./reducer";
-import { v4 as uuidv4 } from "uuid";
+import * as client from "./client";
 
 export default function AssignmentEditor() {
   const { aid, cid } = useParams();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { assignments } = useSelector((state: any) => state.assignmentReducer);
   const isNew = aid === "new";
 
-  const existingAssignment = assignments.find((a: any) => a._id === aid);
-
   const [formData, setFormData] = useState({
-    title: existingAssignment?.title || "",
-    description: existingAssignment?.description || "",
-    points: existingAssignment?.points || "",
-    dueDate: existingAssignment?.dueDate || "",
-    availableFrom: existingAssignment?.availableFrom || "",
-    availableUntil: existingAssignment?.availableUntil || "",
-    group: existingAssignment?.group || "Assignments",
-    displayGrade: existingAssignment?.displayGrade || "Percentage",
-    submissionType: existingAssignment?.submissionType || "Online",
-    assignTo: existingAssignment?.assignTo || "Everyone",
+    title: "",
+    description: "",
+    points: "",
+    dueDate: "",
+    availableFrom: "",
+    availableUntil: "",
+    group: "Assignments",
+    displayGrade: "Percentage",
+    submissionType: "Online",
+    assignTo: "Everyone",
   });
+
+  const load = async () => {
+    if (!cid) return;
+    const all = await client.findAssignmentsForCourse(cid);
+    const assignment = all.find((a: any) => a._id === aid);
+    if (assignment) setFormData(assignment);
+  };
 
   const handleChange = (field: string, value: string) => {
     setFormData({ ...formData, [field]: value });
   };
 
-  const handleSave = () => {
-    const updatedAssignment = {
-      _id: isNew ? uuidv4() : aid,
-      course: cid,
-      ...formData,
-    };
+  const handleSave = async () => {
+    const assignment = { ...formData, course: cid, _id: aid };
 
     if (isNew) {
-      dispatch(addAssignment(updatedAssignment));
+      await client.createAssignment(assignment);
     } else {
-      dispatch(updateAssignment(updatedAssignment));
+      await client.updateAssignment(assignment);
     }
 
     navigate(`/Kambaz/Courses/${cid}/Assignments`);
@@ -51,7 +48,11 @@ export default function AssignmentEditor() {
     navigate(`/Kambaz/Courses/${cid}/Assignments`);
   };
 
-  if (!isNew && !existingAssignment) {
+  useEffect(() => {
+    if (!isNew) load();
+  }, [aid]);
+
+  if (!isNew && !formData.title) {
     return <div className="p-3">Assignment not found.</div>;
   }
 

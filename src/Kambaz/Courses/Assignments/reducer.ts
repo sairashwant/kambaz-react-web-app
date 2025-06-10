@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import * as db from "../../Database";
-
 const assignmentSlice = createSlice({
   name: "assignmentReducer",
   initialState: {

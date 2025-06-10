@@ -1,4 +1,4 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ListGroup } from "react-bootstrap";
 import { IoEllipsisVertical } from "react-icons/io5";
@@ -7,22 +7,31 @@ import { BsGripVertical } from "react-icons/bs";
 import { MdAssignment } from "react-icons/md";
 import AssignmentControl from "./AssignmentControl";
 import AssignmentControlButtons from "./AssignmentControlButtons";
-import { deleteAssignment } from "./reducer";
+import * as client from "./client";
+import { useSelector } from "react-redux";
 
 export default function Assignments() {
   const { cid } = useParams();
-  const dispatch = useDispatch();
-  const { assignments } = useSelector((state: any) => state.assignmentReducer);
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const isFaculty = currentUser?.role === "FACULTY";
 
-  const courseAssignments = assignments.filter((a: any) => a.course === cid);
+  const [assignments, setAssignments] = useState<any[]>([]);
 
-  const handleDelete = (id: string) => {
+  const loadAssignments = async () => {
+    const data = await client.findAssignmentsForCourse(cid!);
+    setAssignments(data);
+  };
+
+  const handleDelete = async (id: string) => {
     if (window.confirm("Are you sure you want to delete this assignment?")) {
-      dispatch(deleteAssignment(id));
+      await client.deleteAssignment(id);
+      loadAssignments();
     }
   };
+
+  useEffect(() => {
+    loadAssignments();
+  }, [cid]);
 
   return (
     <div id="wd-assignments">
@@ -48,7 +57,7 @@ export default function Assignments() {
         </div>
 
         <ListGroup className="wd-lessons rounded-0">
-          {courseAssignments.map((a: any) => (
+          {assignments.map((a: any) => (
             <ListGroup.Item key={a._id} className="wd-lesson p-3 ps-1">
               <div className="d-flex justify-content-between align-items-start">
                 <div className="d-flex align-items-start me-3">
@@ -73,7 +82,7 @@ export default function Assignments() {
                   <div className="d-flex flex-column align-items-end gap-2">
                     <AssignmentControlButtons />
                     <FaTrash
-                      className="text-danger cursor-pointer"
+                      className="text-danger"
                       onClick={() => handleDelete(a._id)}
                       style={{ cursor: "pointer" }}
                     />
