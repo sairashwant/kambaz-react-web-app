@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
-import { Col, Form, Row, Button } from "react-bootstrap";
+import { Col, Form, Row, Button, Modal } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router-dom";
 import * as client from "./client";
+import { useSelector } from "react-redux";
 
 export default function AssignmentEditor() {
   const { aid, cid } = useParams();
   const navigate = useNavigate();
   const isNew = aid === "new";
+
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const isFaculty = currentUser?.role === "FACULTY";
+  const [showModal, setShowModal] = useState(!isFaculty);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -48,9 +53,33 @@ export default function AssignmentEditor() {
     navigate(`/Kambaz/Courses/${cid}/Assignments`);
   };
 
+  const handleModalClose = () => {
+    setShowModal(false);
+    navigate(`/Kambaz/Courses/${cid}/Assignments`);
+  };
+
   useEffect(() => {
+    if (!isFaculty) return;
     if (!isNew) load();
   }, [aid]);
+
+  if (!isFaculty) {
+    return (
+      <Modal show={showModal} onHide={handleModalClose} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Access Not Allowed</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          You do not have permission to access the assignment editor. Only faculty can edit assignments.
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleModalClose}>
+            OK
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
 
   if (!isNew && !formData.title) {
     return <div className="p-3">Assignment not found.</div>;

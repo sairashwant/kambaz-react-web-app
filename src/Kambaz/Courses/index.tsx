@@ -1,25 +1,17 @@
 import CourseNavigation from "./Navigation";
-import { Route, Routes, useParams, useLocation, Navigate } from "react-router";
+import { Route, Routes, useParams, useLocation } from "react-router";
 import Modules from "./Modules";
 import Home from "./Home";
 import Assignments from "./Assignments";
 import AssignmentEditor from "./Assignments/Editor";
 import { FaAlignJustify } from "react-icons/fa";
 import PeopleTable from "./People/Table";
-import { useSelector } from "react-redux";
 
 export default function Courses({ courses }: { courses: any[] }) {
   const { cid } = useParams();
   const { pathname } = useLocation();
-  const { currentUser } = useSelector((state: any) => state.accountReducer);
 
   const course = courses.find((c) => c._id === cid);
-  const isFaculty = currentUser?.role === "FACULTY";
-  const isEnrolled = isFaculty || course?.enrolled;
-
-  if (!isEnrolled) {
-    return <Navigate to="/Kambaz/Dashboard" replace />;
-  }
 
   return (
     <div id="wd-courses">
