@@ -30,4 +30,14 @@ export const createCourse = async (course: any) => {
   const { data } = await axiosWithCredentials.post(`${USERS_API}/current/courses`, course);
   return data;
 };
+export const findAllUsers = async () => {
+  const response = await axiosWithCredentials.get(USERS_API);
+  return response.data;
+};
+export const findUsersByRole = async (role: string) => {
+  const response = await
+    axios.get(`${USERS_API}?role=${role}`);
+  return response.data;
+};
+
 
