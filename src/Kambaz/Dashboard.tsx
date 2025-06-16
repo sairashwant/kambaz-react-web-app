@@ -37,8 +37,9 @@ export default function Dashboard({
         </Col>
         <Col className="text-end">
           <Button variant="primary" onClick={() => setEnrolling(!enrolling)}>
-            {enrolling ? "My Courses" : "All Courses"}
+          {enrolling ? "My Courses" : "All Courses"}
           </Button>
+
         </Col>
       </Row>
 

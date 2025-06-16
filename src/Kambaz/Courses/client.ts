@@ -29,3 +29,9 @@ export const fetchEnrolledCoursesForUser = async (userId: string) => {
   const { data } = await axios.get(`${REMOTE_SERVER}/api/users/${userId}/courses`);
   return data;
 };
+export const createCourse = async (course: any) => {
+  const { data } = await axios.post(COURSES_API, { ...course});
+  return data;
+};
+
+
