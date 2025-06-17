@@ -28,7 +28,7 @@ export default function Dashboard({
 
   const handleAddCourse = async () => {
     await addCourse();
-    setEnrolling(false); // switch back to My Courses to show new course
+    setEnrolling(false);
   };
 
   return (
@@ -88,7 +88,7 @@ export default function Dashboard({
                 <Card.Img src="/images/reactjs.jpg" height={160} />
                 <Card.Body>
                   <h5 className="wd-dashboard-course-title card-title">
-                    {enrolling && (
+                    {enrolling && !isFaculty && (
                       <button
                         onClick={(event) => {
                           event.preventDefault();
