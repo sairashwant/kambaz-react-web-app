@@ -3,6 +3,7 @@ import { Col, Form, Row, Button, Modal } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router-dom";
 import * as client from "./client";
 import { useSelector } from "react-redux";
+import { v4 as uuidv4 } from "uuid";
 
 export default function AssignmentEditor() {
   const { aid, cid } = useParams();
@@ -51,16 +52,22 @@ export default function AssignmentEditor() {
   };
 
   const handleSave = async () => {
-    const assignment = { 
-      ...formData, 
-      course: cid || "", 
-      _id: aid || "", 
-      points: Number(formData.points) 
-    };
-
+    let assignment;
     if (isNew) {
+      assignment = { 
+        ...formData, 
+        course: cid || "", 
+        _id: uuidv4(),
+        points: Number(formData.points) 
+      };
       await client.createAssignment(assignment);
     } else {
+      assignment = { 
+        ...formData, 
+        course: cid || "", 
+        _id: aid || "", 
+        points: Number(formData.points) 
+      };
       await client.updateAssignment(assignment);
     }
 
