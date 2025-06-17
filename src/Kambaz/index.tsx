@@ -69,9 +69,14 @@ const addCourse = async () => {
   setEnrolling(false);
 };
 
-  const deleteCourse = async (courseId: string) => {
-    setCourses(courses.filter((course) => course._id !== courseId));
-  };
+const deleteCourse = async (courseId: string) => {
+  try {
+    await courseClient.deleteCourse(courseId);
+    enrolling ? await fetchCourses() : await findCoursesForUser(); 
+  } catch (error) {
+    console.error("Error deleting course:", error);
+  }
+};
 
   const updateCourse = async () => {
     try {
