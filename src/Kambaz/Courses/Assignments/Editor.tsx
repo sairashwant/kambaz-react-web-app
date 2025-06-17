@@ -30,7 +30,20 @@ export default function AssignmentEditor() {
     if (!cid) return;
     const all = await client.findAssignmentsForCourse(cid);
     const assignment = all.find((a: any) => a._id === aid);
-    if (assignment) setFormData(assignment);
+    if (assignment) {
+      setFormData({
+        title: assignment.title || "",
+        description: assignment.description || "",
+        points: assignment.points !== undefined ? assignment.points.toString() : "",
+        dueDate: assignment.dueDate || "",
+        availableFrom: assignment.availableFrom || "",
+        availableUntil: assignment.availableUntil || "",
+        group: assignment.group || "Assignments",
+        displayGrade: assignment.displayGrade || "Percentage",
+        submissionType: assignment.submissionType || "Online",
+        assignTo: assignment.assignTo || "Everyone",
+      });
+    }
   };
 
   const handleChange = (field: string, value: string) => {
@@ -38,7 +51,12 @@ export default function AssignmentEditor() {
   };
 
   const handleSave = async () => {
-    const assignment = { ...formData, course: cid, _id: aid };
+    const assignment = { 
+      ...formData, 
+      course: cid || "", 
+      _id: aid || "", 
+      points: Number(formData.points) 
+    };
 
     if (isNew) {
       await client.createAssignment(assignment);
