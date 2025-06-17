@@ -16,7 +16,7 @@ export default function Dashboard({
   courses: any[];
   course: any;
   setCourse: (course: any) => void;
-  addCourse: () => void;
+  addCourse: () => Promise<void>;
   deleteCourse: (courseId: string) => void;
   updateCourse: () => void;
   enrolling: boolean;
@@ -26,22 +26,23 @@ export default function Dashboard({
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const isFaculty = currentUser?.role === "FACULTY";
 
+  const handleAddCourse = async () => {
+    await addCourse();
+    setEnrolling(false); // switch back to My Courses to show new course
+  };
+
   return (
     <div id="wd-dashboard">
-      <h1 id="wd-dashboard-title">Dashboard</h1>
-      <hr />
-
-      <Row className="align-items-center mb-3">
-        <Col>
-          <h5 className="mb-0">New Course</h5>
-        </Col>
-        <Col className="text-end">
-          <Button variant="primary" onClick={() => setEnrolling(!enrolling)}>
+      <h1 id="wd-dashboard-title">
+        Dashboard
+        <Button
+          onClick={() => setEnrolling(!enrolling)}
+          className="float-end btn btn-primary"
+        >
           {enrolling ? "My Courses" : "All Courses"}
-          </Button>
-
-        </Col>
-      </Row>
+        </Button>
+      </h1>
+      <hr />
 
       {isFaculty && !enrolling && (
         <>
@@ -60,7 +61,7 @@ export default function Dashboard({
             }
           />
           <div className="mb-3">
-            <Button onClick={addCourse} className="me-2">
+            <Button onClick={handleAddCourse} className="me-2">
               Add Course
             </Button>
             <Button variant="danger" onClick={updateCourse}>
@@ -79,16 +80,29 @@ export default function Dashboard({
       <Row xs={1} md={5} className="g-4">
         {courses.map((course) => (
           <Col key={course._id} style={{ width: "300px" }}>
-            <Card>
+            <Card border={course.enrolled ? "success" : undefined}>
               <Link
                 to={`/Kambaz/Courses/${course._id}/Home`}
                 className="text-decoration-none text-dark"
               >
                 <Card.Img src="/images/reactjs.jpg" height={160} />
                 <Card.Body>
-                  <Card.Title className="text-nowrap overflow-hidden">
+                  <h5 className="wd-dashboard-course-title card-title">
+                    {enrolling && (
+                      <button
+                        onClick={(event) => {
+                          event.preventDefault();
+                          updateEnrollment(course._id, !course.enrolled);
+                        }}
+                        className={`btn ${
+                          course.enrolled ? "btn-danger" : "btn-success"
+                        } float-end`}
+                      >
+                        {course.enrolled ? "Unenroll" : "Enroll"}
+                      </button>
+                    )}
                     {course.name}
-                  </Card.Title>
+                  </h5>
                   <Card.Text
                     className="overflow-hidden"
                     style={{ height: "100px" }}
@@ -97,19 +111,6 @@ export default function Dashboard({
                   </Card.Text>
                 </Card.Body>
               </Link>
-
-              {enrolling && !isFaculty && (
-                <div className="p-2 d-flex justify-content-between">
-                  <Button
-                    variant={course.enrolled ? "danger" : "success"}
-                    onClick={() =>
-                      updateEnrollment(course._id, !course.enrolled)
-                    }
-                  >
-                    {course.enrolled ? "Unenroll" : "Enroll"}
-                  </Button>
-                </div>
-              )}
 
               {!enrolling && (
                 <Card.Body className="d-flex justify-content-between align-items-center">

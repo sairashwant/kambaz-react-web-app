@@ -10,7 +10,6 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import * as courseClient from "./Courses/client";
 import * as userClient from "./Account/client";
-import * as enrollmentClient from "./Courses/Enrollments/client";
 
 export default function Kambaz() {
   const [courses, setCourses] = useState<any[]>([]);
@@ -28,7 +27,7 @@ export default function Kambaz() {
 
   const findCoursesForUser = async () => {
     try {
-      const courses = await userClient.findMyCourses();
+      const courses = await userClient.findCoursesForUser(currentUser._id);
       setCourses(courses);
     } catch (error) {
       console.error(error);
@@ -38,48 +37,42 @@ export default function Kambaz() {
   const fetchCourses = async () => {
     try {
       const allCourses = await courseClient.fetchAllCourses();
-      console.log("All courses fetched:", allCourses);
-      const enrolledCourses = await userClient.findMyCourses();
-      console.log("Enrolled courses fetched:", enrolledCourses);
+      const enrolledCourses = await userClient.findCoursesForUser(currentUser._id);
       const enrolledIds = new Set(enrolledCourses.map((c: any) => c._id));
       const mergedCourses = allCourses.map((course: any) => ({
         ...course,
         enrolled: enrolledIds.has(course._id),
       }));
-      console.log("Merged courses:", mergedCourses);
       setCourses(mergedCourses);
     } catch (error) {
       console.error("Error fetching all courses:", error);
     }
   };
 
-  const updateEnrollment = async (courseId: string, enrolled: boolean)   => {
-    try {
-      if (!currentUser) return;
-      if (enrolled) {
-        await enrollmentClient.enrollUser(currentUser._id, courseId);
-      } else {
-        await enrollmentClient.unenrollUser(currentUser._id, courseId);
-      }
-      await fetchCourses(); // refresh after enrollment change
-    } catch (error) {
-      console.error("Enrollment update failed:", error);
+  const updateEnrollment = async (courseId: string, enrolled: boolean) => {
+    if (enrolled) {
+      await userClient.enrollIntoCourse(currentUser._id, courseId);
+    } else {
+      await userClient.unenrollFromCourse(currentUser._id, courseId);
     }
+    setCourses(
+      courses.map((course) =>
+        course._id === courseId ? { ...course, enrolled } : course
+      )
+    );
   };
 
- const addCourse = async () => {
-   const newCourse = await courseClient.createCourse(course);
-   if (currentUser) {
-     await enrollmentClient.enrollUser(currentUser._id, newCourse._id);
-   }
-   await fetchCourses();
- };
+const addCourse = async () => {
+  const newCourse = await courseClient.createCourse(course);
+  await userClient.enrollIntoCourse(currentUser._id, newCourse._id);
+  await findCoursesForUser();
+  setEnrolling(false);
+};
 
-
- const deleteCourse = async (courseId: string) => {
-   const status = await courseClient.deleteCourse(courseId);
-   setCourses(courses.filter((course) => course._id !== courseId));
- };
+  const deleteCourse = async (courseId: string) => {
+    const status = await courseClient.deleteCourse(courseId);
+    setCourses(courses.filter((course) => course._id !== courseId));
+  };
 
   const updateCourse = async () => {
     try {
