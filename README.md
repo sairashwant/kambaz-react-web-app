@@ -1,12 +1,175 @@
-# Kambaz React Web App
+# Kambaz Quiz Application
 
-Kambaz is a full-stack course & quiz management platform. The frontend is a fast, client-side React app built with TypeScript + Vite for HMR, typed components, and easy static deployment; it reads its API base URL from VITE_ env vars at build time and renders student/faculty flows for browsing courses, managing assignments, creating/publishing quizzes, taking quizzes, and reviewing attempts. 
-GitHub
+A full-stack **Learning Management System (LMS)** inspired by Canvas,
+built using **React, Node.js, Express, and MongoDB**.\
+The application allows **faculty to create and manage quizzes and
+assignments**, while **students can attempt quizzes and view results**.
 
-The backend is a Node.js API (Express style) that exposes REST endpoints for courses, assignments, quizzes, questions, and student attempts, persisting data in MongoDB via Mongoose. It enforces quiz settings (e.g., availability windows, attempt limits), tracks submissions and scores, and returns results with correct/incorrect highlighting to the UI; faculty endpoints support quiz CRUD and publish states. (Stack aligns with your Kambaz quiz work: MongoDB/Mongoose models for quizzes, questions, attempts; student attempt persistence and history; publish/unpublish; access-code gating.)
-Together, the system supports: role-aware pages (student/faculty), real-time quiz taking with stored results, multiple attempts with limits, time-window access, and admin views of attempts—served by the Node API to the React client. The repos are organized as a React TS + Vite frontend and a JavaScript/Node server app.
+Live Application:
+https://kambaz-quiz-app-summer-project.netlify.app/#/Kambaz/Account/Profile
 
----
+Frontend Repository: https://github.com/sairashwant/kambaz-react-web-app
 
-You find the deployed version in the link below:
-https://kambaz-quiz-app-summer-project.netlify.app/#/Kambaz/Account/Signin
+Backend Repository:
+https://github.com/sairashwant/kambaz-node-server-app
+
+------------------------------------------------------------------------
+
+# Project Overview
+
+The Kambaz Quiz Application simulates a modern Learning Management
+System where instructors create course content and assessments while
+students interact with those resources through a web interface.
+
+The system supports: - Course dashboards - Assignment management - Quiz
+creation and editing - Multiple question types - Student quiz attempts -
+Score calculation - Attempt limits - Access code validation - Result
+review functionality
+
+The project follows a client-server architecture where the frontend
+communicates with backend REST APIs.
+
+------------------------------------------------------------------------
+
+# System Architecture
+
+React (Frontend) \| \| REST API Calls \| Node.js + Express (Backend) \|
+\| Mongoose ODM \| MongoDB Database
+
+------------------------------------------------------------------------
+
+# Features
+
+## Course Dashboard
+
+-   View available courses
+-   Navigate into course modules, assignments, and quizzes
+
+## Quiz Management (Faculty)
+
+Faculty users can: - Create quizzes - Edit quiz details - Publish or
+unpublish quizzes - Configure attempt limits - Set access codes - Add
+questions dynamically
+
+Supported question types: - Multiple Choice - True / False - Fill in the
+Blank
+
+## Quiz Question Editor
+
+Faculty can configure: - Question title - Question text - Points -
+Answer choices - Correct answer
+
+Questions are dynamically saved and synced with the quiz document in
+MongoDB.
+
+## Student Quiz Experience
+
+Students can: - Start quizzes - Enter access code if required - Answer
+questions - Submit quiz attempts - View scores - Review correct and
+incorrect answers
+
+The system highlights: - Correct answers - Incorrect answers - Student
+selected answers
+
+------------------------------------------------------------------------
+
+# Attempt Management
+
+The application supports: - Configurable number of attempts - Attempt
+tracking per student - Attempt count validation - Submission timestamps
+
+All attempts are stored in MongoDB.
+
+------------------------------------------------------------------------
+
+# Score Calculation
+
+When a quiz is submitted: 1. Student answers are compared with correct
+answers 2. Points are calculated per question 3. Total score is computed
+4. Attempt data is stored in the database
+
+Stored attempt data includes: - Student ID - Quiz ID - Selected
+answers - Score - Submission time
+
+------------------------------------------------------------------------
+
+# Technologies Used
+
+## Frontend
+
+-   React
+-   React Router
+-   Redux
+-   TypeScript
+-   Axios
+-   React Bootstrap
+
+## Backend
+
+-   Node.js
+-   Express.js
+-   MongoDB
+-   Mongoose
+
+------------------------------------------------------------------------
+
+# Installation and Setup
+
+## Clone repositories
+
+Frontend: git clone https://github.com/sairashwant/kambaz-react-web-app
+
+Backend: git clone https://github.com/sairashwant/kambaz-node-server-app
+
+------------------------------------------------------------------------
+
+## Install dependencies
+
+Frontend: cd kambaz-react-web-app npm install
+
+Backend: cd kambaz-node-server-app npm install
+
+------------------------------------------------------------------------
+
+## Start backend server
+
+npm start
+
+Server runs on: http://localhost:4000
+
+------------------------------------------------------------------------
+
+## Start frontend
+
+npm start
+
+Application runs on: http://localhost:3000
+
+------------------------------------------------------------------------
+
+# Example API Endpoints
+
+Quiz APIs: GET /api/quizzes POST /api/quizzes PUT /api/quizzes/:quizId
+DELETE /api/quizzes/:quizId
+
+Question APIs: GET /api/quizzes/:quizId/questions POST
+/api/quizzes/:quizId/questions PUT /api/questions/:questionId DELETE
+/api/questions/:questionId
+
+Attempt APIs: POST /api/quizzes/:quizId/attempts GET
+/api/quizzes/:quizId/attempts/:studentId GET
+/api/quizzes/:quizId/attempts/count/:studentId
+
+------------------------------------------------------------------------
+
+# Future Improvements
+
+Potential enhancements include: - JWT authentication - Gradebook
+system - Quiz timer support - Randomized question order - File upload
+for assignments - Instructor analytics dashboard
+
+------------------------------------------------------------------------
+
+# Author
+
+Sai Rashwant GitHub: https://github.com/sairashwant
